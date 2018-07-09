@@ -45,7 +45,7 @@ def processRequest(req):
         result = urlopen(yql_url).read()
         data = json.loads(result)
         res = makeWebhookResult(data)
-    elif req.get("result").get("action") == "getBmi":
+    elif req.get("result").get("action") == "numbers.add":
         data = req
         res = makeWebhookResultForGetBmi(data)
     elif req.get("result").get("action") == "getBmiChart":
@@ -58,32 +58,15 @@ def processRequest(req):
 def makeWebhookResultForGetBmi(data):
     element1 = data.get("result").get("parameters").get("number")
     element2 = data.get("result").get("parameters").get("number-integer")
-    Symbol = int(element1)/int(element2)
-    speech = 'The chemial symbol of '+element+' is '+Symbol
+    Symbol = int(element1)+int(element2)
+    speech = 'The sum '+element+' is '+Symbol
     return {
         "speech": speech,
         "displayText": speech,
         "source": "webhookdata"
     }
  
-def makeWebhookResultForGetAtomicNumber(data):
-    element = data.get("result").get("parameters").get("elementname")
-    atomicNumber = 'Unknown'
-    if element == 'Carbon':
-        atomicNumber = '6'
-    elif element == 'Hydrogen':
-        atomicNumber = '1'
-    elif element == 'Nitrogen':
-        atomicNumber = '7'
-    elif element == 'Oxygen':
-        atomicNumber = '8'
-    speech = 'The atomic number of '+element+' is '+atomicNumber
- 
-    return {
-        "speech": speech,
-        "displayText": speech,
-        "source": "webhookdata"
-    }
+
  
 def makeYqlQuery(req):
     result = req.get("result")
